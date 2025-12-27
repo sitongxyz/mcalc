@@ -1,6 +1,7 @@
 package org.mizhou.mcalc.test;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.mizhou.mcalc.Expression;
 import org.mizhou.mcalc.exception.UnknownFunctionException;
@@ -52,6 +53,13 @@ public class TestExpression {
 
         expr = Expression.parse("pi()");
         assertEquals("3.141592653589793", expr.toString());
+
+        // 测试多个函数
+        expr = Expression.parse("pow(2, 4) + 1.23456789 * log(2, 4)");
+        assertEquals("16 + 1.23456789 * 2.0", expr.toString());
+
+        expr = Expression.parse("1.23456789 * pow(2, 4) * log(2, 4)");
+        assertEquals("1.23456789 * 16 * 2.0", expr.toString());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -70,5 +78,4 @@ public class TestExpression {
         assertEquals("1 + ( 3 - 2 ) * 4 / 5", expr.toString());
         assertEquals("1 3 2 - 4 * 5 / +", expr.toPostfixExpr().toString());
     }
-
 }

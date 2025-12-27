@@ -35,10 +35,15 @@ public class Func extends AbstractToken implements Token {
 
             for (int i = 0; i < params.length; i++) {
                 String paramStr = paramStrs[i].trim();
-                
+
                 // 如果需要参数也能是表达式，修改这个地方
                 // 先计算出表达式的值（Num），然后将其作为参数
-                params[i] = new Num(paramStr); 
+                try {
+                    params[i] = new Num(paramStr);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException(
+                            String.format("'%s' 第 %d 个参数解析出错：%s", content, i + 1, paramStr));
+                }
             }
         }
     }
@@ -76,5 +81,4 @@ public class Func extends AbstractToken implements Token {
 
         return function.toString();
     }
-
 }

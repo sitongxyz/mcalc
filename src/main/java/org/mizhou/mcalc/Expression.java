@@ -27,7 +27,7 @@ public class Expression {
             + "(\\d*\\.\\d+|\\d+)" + "|" // 正数
             + "(\\+|-|\\*|/)" + "|" // 运算符
             + "(\\(|\\))" + "|" // 括号
-            + "([A-Za-z]+\\(.*\\))" // 函数
+            + "([A-Za-z]+\\(.*?\\))" // 函数
             + ")\\s*";
 
     private static final Pattern PATTERN = Pattern.compile(REG_EXPR);
