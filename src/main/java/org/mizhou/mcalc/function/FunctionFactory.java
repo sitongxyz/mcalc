@@ -1,5 +1,7 @@
 package org.mizhou.mcalc.function;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,5 +27,9 @@ public final class FunctionFactory {
         }
 
         return null;
+    }
+
+    public static Collection<String> getFunctionNames() {
+        return List.of("pi", "log", "pow");
     }
 }

@@ -1,11 +1,10 @@
 package org.mizhou.mcalc;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.mizhou.mcalc.exception.ExpressionMismatchException;
 import org.mizhou.mcalc.exception.InvalidExpressionException;
 import org.mizhou.mcalc.token.Bracket;
@@ -25,8 +24,8 @@ public class Expression {
             = "\\s*("
             + "(\\(-(\\d*\\.\\d+|\\d+)\\))" + "|" // 负数
             + "(\\d*\\.\\d+|\\d+)" + "|" // 正数
-            + "(\\+|-|\\*|/)" + "|" // 运算符
-            + "(\\(|\\))" + "|" // 括号
+            + "([+\\-*/])" + "|" // 运算符
+            + "([()])" + "|" // 括号
             + "([A-Za-z]+\\(.*?\\))" // 函数
             + ")\\s*";
 
@@ -139,19 +138,26 @@ public class Expression {
         ArrayDeque<Token> stack = new ArrayDeque<>();
 
         for (Token token : tokens) {
-
             if (token.isNumber()) {
                 stack.push(token);
-
-            } else {
-                Num n1 = (Num) stack.pop();
-                Num n2 = (Num) stack.pop();
-                Operator op = (Operator) token;
-
-                Num result = n2.operate(op, n1);
-                stack.push(result);
+                continue;
             }
 
+            if (stack.isEmpty()) {
+                throw new InvalidExpressionException();
+            }
+
+            Num n1 = (Num) stack.pop();
+
+            if (stack.isEmpty()) {
+                throw new InvalidExpressionException();
+            }
+
+            Num n2 = (Num) stack.pop();
+
+            Operator op = (Operator) token;
+            Num result = n2.operate(op, n1);
+            stack.push(result);
         }
 
         if (stack.size() != 1) { // 栈中最后剩下的不止一个数，说明表达式有问题
@@ -230,15 +236,8 @@ public class Expression {
 
     @Override
     public String toString() {
-        StringBuilder expr = new StringBuilder();
-
-        for (Token token : tokens) {
-            expr.append(token.text()).append(' ');
-        }
-
-        expr.deleteCharAt(expr.length() - 1); // 删除末尾的空格
-
-        return expr.toString();
+        return tokens.stream()
+                .map(Token::text)
+                .collect(Collectors.joining(" "));
     }
-
 }

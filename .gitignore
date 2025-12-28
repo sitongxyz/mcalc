@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### WARP ###
+WARP.md
+
 ### STS ###
 .apt_generated
 .classpath

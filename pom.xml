@@ -14,6 +14,13 @@
     </properties>
 
     <dependencies>
+        <!-- JLine 3 for interactive CLI input -->
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>3.30.6</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
